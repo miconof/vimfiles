@@ -14,7 +14,7 @@ set history=1000
 set showcmd     "show incomplete cmds down the bottom
 set showmode    "show current mode down the bottom
 
-set number      "show line numbers
+"set number      "show line numbers
 
 "display tabs and trailing spaces
 set list
@@ -244,7 +244,7 @@ endfunction
 
 "nerdtree settings
 let g:NERDTreeMouseMode = 2
-let g:NERDTreeWinSize = 40
+let g:NERDTreeWinSize = 24
 
 "source project specific config files
 runtime! projects/**/*.vim
@@ -415,3 +415,9 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 "colorscheme zeburn
 " Default white on pink for the pop-up menu looks a bit unpleasant
 highlight Pmenu ctermbg=238 gui=bold
+
+"gundo configuration
+let g:gundo_width = 30
+let g:gundo_preview_height = 30
+let g:gundo_right = 1
+nnoremap <F8> :GundoToggle<CR>
