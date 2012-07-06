@@ -421,3 +421,6 @@ let g:gundo_width = 30
 let g:gundo_preview_height = 30
 let g:gundo_right = 1
 nnoremap <F8> :GundoToggle<CR>
+
+" Close Vim if the only buffer is a nerdtree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary")|q|endif
