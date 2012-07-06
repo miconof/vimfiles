@@ -246,11 +246,6 @@ endfunction
 let g:NERDTreeMouseMode = 2
 let g:NERDTreeWinSize = 40
 
-"explorer mappings
-nnoremap <f1> :BufExplorer<cr>
-nnoremap <f2> :NERDTreeToggle<cr>
-nnoremap <f3> :TagbarToggle<cr>
-
 "source project specific config files
 runtime! projects/**/*.vim
 
@@ -306,3 +301,117 @@ autocmd BufReadPost fugitive://*
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
 
+""""""""""""""""""""
+" My modifications "
+""""""""""""""""""""
+
+set smartindent
+set bg=dark                     " for dark background
+set backupdir=~/.vim/backup     " put backup and swap files out of the way!
+set directory=~/.vim/tmp
+
+"explorer mappings
+nnoremap <C-b> :BufExplorer<cr>
+nnoremap <F5> :NERDTreeToggle<cr>
+nnoremap <F6> :TagbarToggle<cr>
+
+" tab navigation
+nmap <A-Left> gT
+nmap <A-Right> gt
+imap <A-Left> <esc>gT
+imap <A-Right> <esc>gt
+imap <C-O> <esc>:tabnew<cr>
+nmap <C-O> :tabnew<cr>
+:map <A-F1> 1gt     " goto first tab
+:map <A-F2> 2gt
+:map <A-F3> 3gt
+:map <A-F4> 4gt
+:map <A-F5> 5gt
+:map <A-F6> 6gt
+:map <A-F7> 7gt
+:map <A-F8> 8gt
+:map <A-F9> 9gt
+:map <A-F0> 10g
+
+" buffer navigation
+nmap <C-Left> :bp<cr>
+imap <C-Left> <esc>:bp<cr>
+nmap <C-Right> :bn<cr>
+imap <C-Right> <esc>:bn<cr>
+nmap <C-Up> :buffers<cr>
+imap <C-Up> <esc>:buffers<cr>
+
+" go to bottom of next and previous buffers
+nmap <F3> :bp<cr>G
+imap <F3> <esc>:bp<cr>G
+nmap <F4> :bn<cr>G
+imap <F4> <esc>:bn<cr>G
+
+
+" fast save
+nmap <F2> :wall<cr>
+imap <F2> <esc>:wall<cr>
+
+" title
+let &titlestring = "vim:" . expand("%:t")
+if &term == "screen"
+    set t_ts=^[k
+    set t_fs=^[\
+endif
+if &term == "screen" || &term == "xterm"
+    set title
+endif
+
+" for C-like programming: automatic indentation
+autocmd FileType c,cpp,slang set cindent
+
+" in makefiles, don't expand tabs to spaces, since actual tab characters are
+" needed, and have indentation at 8 chars to be sure that all indents are tabs
+" (despite the mappings later):
+autocmd FileType make set noexpandtab shiftwidth=8
+
+" python
+autocmd BufRead,BufNewFile *.py syntax on
+autocmd BufRead,BufNewFile *.py set ai
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+
+" These settings are needed for latex-suite
+filetype on
+let g:tex_flavor='latex'
+set grepprg=grep\ -nH\ $*
+set iskeyword+=:
+
+" For our convenience as we are all familiar with using Ctrl+c to copy a block
+" of text in most other GUI applications, we can also map Ctrl+c to "*y so
+" that in Vim Visual Mode, we can simply Ctrl+c to copy the block of text we
+" want into our system buffer. To do that, we simply add this line in our
+" .vimrc file:
+map <C-c> "*y<CR>
+
+" looks for tags file recursively upwards in the directories tree
+set tags=./tags;
+
+" Toggle comments of selected lines in normal, visual and insert modes
+map <C-D> <plug>NERDCommenterInvert
+map! <C-D> <esc><plug>NERDCommenterInvert i
+
+" ack-grep
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+nnoremap <silent> <F7> :Ack<cr>
+
+" generates ctags
+map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
+" Toggle autoindentation for clipboard pasting
+set pastetoggle=<F10>
+
+" Remove trail spaces
+nnoremap <silent> ,r :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+
+" close automatically preview window of omnicompletion
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+"colorscheme zeburn
+" Default white on pink for the pop-up menu looks a bit unpleasant
+highlight Pmenu ctermbg=238 gui=bold
