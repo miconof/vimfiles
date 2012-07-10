@@ -32,6 +32,7 @@ if v:version >= 703
     set undofile
 
     set colorcolumn=+1 "mark the ideal max text width
+    highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
 endif
 
 "default indent settings
@@ -225,7 +226,8 @@ endfunction
 function! s:LongLines()
     let threshold = (&tw ? &tw : 80)
     let spaces = repeat(" ", &ts)
-    let line_lens = map(getline(1,'$'), 'len(substitute(v:val, "\\t", spaces, "g"))')
+    let line_lens =
+      \ map(getline(1,'$'), 'len(substitute(v:val, "\\t", spaces, "g"))')
     return filter(line_lens, 'v:val > threshold')
 endfunction
 
@@ -373,7 +375,8 @@ autocmd FileType make set noexpandtab shiftwidth=8
 " python
 autocmd BufRead,BufNewFile *.py syntax on
 autocmd BufRead,BufNewFile *.py set ai
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufRead *.py set smartindent
+  \ cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " These settings are needed for latex-suite
 filetype on
@@ -397,7 +400,7 @@ map! <C-D> <esc><plug>NERDCommenterInvert i
 
 " ack-grep
 let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-nnoremap <silent> <F7> :Ack<cr>
+nnoremap <F7> :Ack<space>
 
 " generates ctags
 map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
@@ -423,4 +426,13 @@ let g:gundo_right = 1
 nnoremap <F8> :GundoToggle<CR>
 
 " Close Vim if the only buffer is a nerdtree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary")|q|endif
+autocmd bufenter *
+  \ if (winnr("$") == 1 && exists("b:NERDTreeType")
+  \ && b:NERDTreeType == "primary")|
+  \ q|
+  \ endif
+
+"Text indentation with par
+" some features are useful for writting latex source files
+set formatprg=par
+autocmd FileType tex set textwidth=78 formatoptions+=t
