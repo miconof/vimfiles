@@ -436,3 +436,4 @@ autocmd bufenter *
 " some features are useful for writting latex source files
 set formatprg=par
 autocmd FileType tex set textwidth=78 formatoptions+=t spell
+let g:tex_comment_nospell= 1 "disable spell checker in comments
