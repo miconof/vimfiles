@@ -435,4 +435,4 @@ autocmd bufenter *
 "Text indentation with par
 " some features are useful for writting latex source files
 set formatprg=par
-autocmd FileType tex set textwidth=78 formatoptions+=t
+autocmd FileType tex set textwidth=78 formatoptions+=t spell
