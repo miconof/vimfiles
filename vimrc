@@ -5,34 +5,25 @@ set nocompatible
 "activate pathogen
 call pathogen#infect()
 
-"allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
-"store lots of :cmdline history
-set history=1000
-
-set showcmd     "show incomplete cmds down the bottom
-set showmode    "show current mode down the bottom
-
-"set number      "show line numbers
-
-"display tabs and trailing spaces
-set list
+set backspace=indent,eol,start  "allow backspacing over anything, insert mode
+set history=999                 "store lots of :cmdline history
+set showcmd                     "show incomplete cmds down the bottom
+set showmode                    "show current mode down the bottom
+"set number                     "show line numbers
+set list                        "display tabs and trailing spaces
 set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
-
-set incsearch   "find the next match as we type the search
-set hlsearch    "hilight searches by default
-
-set wrap        "dont wrap lines
-set linebreak   "wrap lines at convenient points
+set incsearch                   "find the next match as we type the search
+set hlsearch                    "hilight searches by default
+set wrap                        "dont wrap lines
+set linebreak                   "wrap lines at convenient points
 
 if v:version >= 703
     "undo settings
     set undodir=~/.vim/undofiles
     set undofile
 
-    set colorcolumn=+1 "mark the ideal max text width
-    highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
+    set colorcolumn=+1          "mark the ideal max text width
+    hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 endif
 
 "default indent settings
@@ -58,6 +49,7 @@ set sidescrolloff=7
 set sidescroll=1
 
 "load ftplugins and indent files
+filetype on
 filetype plugin on
 filetype indent on
 
@@ -251,9 +243,21 @@ let g:NERDTreeWinSize = 24
 "source project specific config files
 runtime! projects/**/*.vim
 
-"dont load csapprox if we no gui support - silences an annoying warning
 if !has("gui")
-    let g:CSApprox_loaded = 1
+    let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
+else
+    "set guifont=Osaka-Mono:h20
+    set background=dark
+    set cursorline        " highlight current line
+    colors wombat
+    highlight CursorLine guibg=#003853 ctermbg=24 gui=none cterm=none
+
+    " Remove toolbar, left scrollbar and right scrollbar
+    set guioptions-=T
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=R
 endif
 
 "make <c-l> clear the highlight as well as redraw
@@ -379,7 +383,6 @@ autocmd BufRead *.py set smartindent
   \ cinwords=if,elif,else,for,while,try,except,finally,def,class
 
 " These settings are needed for latex-suite
-filetype on
 let g:tex_flavor='latex'
 set grepprg=grep\ -nH\ $*
 set iskeyword+=:
