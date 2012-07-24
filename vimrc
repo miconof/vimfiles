@@ -165,6 +165,7 @@ if has("gui_running")
 else
     let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
     set background=dark
+    colors wombat
 endif
 
 "statusline setup
