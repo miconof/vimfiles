@@ -17,15 +17,6 @@ set hlsearch                    "hilight searches by default
 set wrap                        "dont wrap lines
 set linebreak                   "wrap lines at convenient points
 
-if v:version >= 703
-    "undo settings
-    set undodir=~/.vim/undofiles
-    set undofile
-
-    set colorcolumn=+1          "mark the ideal max text width
-    hi ColorColumn ctermbg=lightgrey guibg=lightgrey
-endif
-
 "default indent settings
 set shiftwidth=4
 set softtabstop=4
@@ -33,38 +24,148 @@ set expandtab
 set autoindent
 
 "folding settings
-set foldmethod=indent   "fold based on indent
-set foldnestmax=3       "deepest fold is 3 levels
-set nofoldenable        "dont fold by default
-
+set foldmethod=indent       "fold based on indent
+set foldnestmax=3           "deepest fold is 3 levels
+set nofoldenable            "dont fold by default
 set wildmode=list:longest   "make cmdline tab completion similar to bash
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
 set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
-
-set formatoptions-=o "dont continue comments when pushing o/O
+set formatoptions-=o        "dont continue comments when pushing o/O
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
 
+"some stuff to get the mouse going in term
+set mouse=a
+set ttymouse=xterm2
+set t_Co=256                "tell the term has 256 colors
+set hidden                  "hide buffers when not displayed
+
 "load ftplugins and indent files
 filetype on
 filetype plugin on
 filetype indent on
+syntax on                   "turn on syntax highlighting
 
-"turn on syntax highlighting
-syntax on
+"make <c-l> clear the highlight as well as redraw
+nnoremap <C-L> :nohls<CR><C-L>
+inoremap <C-L> <C-O>:nohls<CR>
 
-"some stuff to get the mouse going in term
-set mouse=a
-set ttymouse=xterm2
+"map Q to something useful
+noremap Q gq
+"make Y consistent with C and D
+nnoremap Y y$
 
-"tell the term has 256 colors
-set t_Co=256
+set smartindent
+set backupdir=~/.vim/backup     "put backup and swap files out of the way!
+set directory=~/.vim/tmp
+" For our convenience we can also map Ctrl+c to copy a block of text
+map <C-c> "*y<CR>
+set tags=./tags;    "look for tags recursively upwards in the directories tree
+set formatprg=par   "Set par as the default parser for text
 
-"hide buffers when not displayed
-set hidden
+"nerdtree settings
+let g:NERDTreeMouseMode = 2
+let g:NERDTreeWinSize = 24
+
+"gundo configuration
+let g:gundo_width = 30
+let g:gundo_preview_height = 30
+let g:gundo_right = 1
+
+" ack-grep configuration
+let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+
+" Function key mappings
+nmap <F2> :wall<cr>
+imap <F2> <esc>:wall<cr>
+nmap <F3> :bp<cr>G
+imap <F3> <esc>:bp<cr>G
+nmap <F4> :bn<cr>G
+imap <F4> <esc>:bn<cr>G
+nnoremap <F5> :NERDTreeToggle<cr>
+nnoremap <F6> :TagbarToggle<cr>
+nnoremap <F7> :Ack<space>
+nnoremap <F8> :GundoToggle<CR>
+nnoremap <F9> :BufExplorer<cr>
+set pastetoggle=<F10>           "Toggle autoindentation for clipboard pasting
+map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
+" Toggle comments of selected lines in normal, visual and insert modes
+map <C-D> <plug>NERDCommenterInvert
+map! <C-D> <esc><plug>NERDCommenterInvert i
+
+" tab navigation
+nmap <A-Left> gT
+nmap <A-Right> gt
+imap <A-Left> <esc>gT
+imap <A-Right> <esc>gt
+imap <C-O> <esc>:tabnew<cr>
+nmap <C-O> :tabnew<cr>
+:map <A-F1> 1gt     " goto first tab
+:map <A-F2> 2gt
+:map <A-F3> 3gt
+:map <A-F4> 4gt
+:map <A-F5> 5gt
+:map <A-F6> 6gt
+:map <A-F7> 7gt
+:map <A-F8> 8gt
+:map <A-F9> 9gt
+:map <A-F0> 10g
+
+" buffer navigation
+nmap <C-Left> :bp<cr>
+imap <C-Left> <esc>:bp<cr>
+nmap <C-Right> :bn<cr>
+imap <C-Right> <esc>:bn<cr>
+nmap <C-Up> :buffers<cr>
+imap <C-Up> <esc>:buffers<cr>
+
+" Filetype dependant options
+autocmd FileType c,cpp,slang set cindent "automatic indentation for C/C++
+autocmd filetype svn,*commit* setlocal spell "spell check for commit logs
+autocmd FileType make set noexpandtab shiftwidth=8 "tabs in makefiles
+"autocmd BufRead,BufNewFile *.py syntax on
+"autocmd BufRead,BufNewFile *.py set ai
+autocmd BufRead *.py set smartindent
+  \ cinwords=if,elif,else,for,while,try,except,finally,def,class
+
+" These settings are needed for latex-suite
+let g:tex_flavor='latex'
+set grepprg=grep\ -nH\ $*
+set iskeyword+=:
+autocmd FileType tex set textwidth=80 formatoptions+=t spell
+let g:tex_comment_nospell= 1 "disable spell checker in comments
+
+" enable version dependent options
+if v:version >= 703
+    set undodir=~/.vim/undofiles    "undo settings
+    set undofile
+
+    set colorcolumn=+1              "mark the ideal max text width
+    hi ColorColumn ctermbg=lightgrey guibg=lightgrey
+endif
+
+" GUI dependent options
+if has("gui_running")
+    "set guifont=Osaka-Mono:h20
+    set background=dark
+    set cursorline        " highlight current line
+    colors wombat
+    highlight CursorLine guibg=#003853 ctermbg=24 gui=none cterm=none
+
+    " Remove toolbar, left scrollbar and right scrollbar
+    set guioptions-=T
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=R
+else
+    let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
+    set background=dark
+endif
 
 "statusline setup
 set statusline =%#identifier#
@@ -236,40 +337,6 @@ function! s:Median(nums)
     endif
 endfunction
 
-"nerdtree settings
-let g:NERDTreeMouseMode = 2
-let g:NERDTreeWinSize = 24
-
-"source project specific config files
-runtime! projects/**/*.vim
-
-if !has("gui")
-    let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
-else
-    "set guifont=Osaka-Mono:h20
-    set background=dark
-    set cursorline        " highlight current line
-    colors wombat
-    highlight CursorLine guibg=#003853 ctermbg=24 gui=none cterm=none
-
-    " Remove toolbar, left scrollbar and right scrollbar
-    set guioptions-=T
-    set guioptions-=l
-    set guioptions-=L
-    set guioptions-=r
-    set guioptions-=R
-endif
-
-"make <c-l> clear the highlight as well as redraw
-nnoremap <C-L> :nohls<CR><C-L>
-inoremap <C-L> <C-O>:nohls<CR>
-
-"map Q to something useful
-noremap Q gq
-
-"make Y consistent with C and D
-nnoremap Y y$
-
 "visual search mappings
 function! s:VSetSearch()
     let temp = @@
@@ -293,9 +360,6 @@ function! SetCursorPosition()
     end
 endfunction
 
-"spell check when writing commit logs
-autocmd filetype svn,*commit* setlocal spell
-
 "http://vimcasts.org/episodes/fugitive-vim-browsing-the-git-object-database/
 "hacks from above (the url, not jesus) to delete fugitive buffers when we
 "leave them - otherwise the buffer list gets poluted
@@ -307,56 +371,12 @@ autocmd BufReadPost fugitive://*
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
 
-""""""""""""""""""""
-" My modifications "
-""""""""""""""""""""
+" Remove trail spaces
+nnoremap <silent> ,r :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 
-set smartindent
-set bg=dark                     " for dark background
-set backupdir=~/.vim/backup     " put backup and swap files out of the way!
-set directory=~/.vim/tmp
-
-"explorer mappings
-nnoremap <C-b> :BufExplorer<cr>
-nnoremap <F5> :NERDTreeToggle<cr>
-nnoremap <F6> :TagbarToggle<cr>
-
-" tab navigation
-nmap <A-Left> gT
-nmap <A-Right> gt
-imap <A-Left> <esc>gT
-imap <A-Right> <esc>gt
-imap <C-O> <esc>:tabnew<cr>
-nmap <C-O> :tabnew<cr>
-:map <A-F1> 1gt     " goto first tab
-:map <A-F2> 2gt
-:map <A-F3> 3gt
-:map <A-F4> 4gt
-:map <A-F5> 5gt
-:map <A-F6> 6gt
-:map <A-F7> 7gt
-:map <A-F8> 8gt
-:map <A-F9> 9gt
-:map <A-F0> 10g
-
-" buffer navigation
-nmap <C-Left> :bp<cr>
-imap <C-Left> <esc>:bp<cr>
-nmap <C-Right> :bn<cr>
-imap <C-Right> <esc>:bn<cr>
-nmap <C-Up> :buffers<cr>
-imap <C-Up> <esc>:buffers<cr>
-
-" go to bottom of next and previous buffers
-nmap <F3> :bp<cr>G
-imap <F3> <esc>:bp<cr>G
-nmap <F4> :bn<cr>G
-imap <F4> <esc>:bn<cr>G
-
-
-" fast save
-nmap <F2> :wall<cr>
-imap <F2> <esc>:wall<cr>
+" close automatically preview window of omnicompletion
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " title
 let &titlestring = "vim:" . expand("%:t")
@@ -368,66 +388,6 @@ if &term == "screen" || &term == "xterm"
     set title
 endif
 
-" for C-like programming: automatic indentation
-autocmd FileType c,cpp,slang set cindent
-
-" in makefiles, don't expand tabs to spaces, since actual tab characters are
-" needed, and have indentation at 8 chars to be sure that all indents are tabs
-" (despite the mappings later):
-autocmd FileType make set noexpandtab shiftwidth=8
-
-" python
-autocmd BufRead,BufNewFile *.py syntax on
-autocmd BufRead,BufNewFile *.py set ai
-autocmd BufRead *.py set smartindent
-  \ cinwords=if,elif,else,for,while,try,except,finally,def,class
-
-" These settings are needed for latex-suite
-let g:tex_flavor='latex'
-set grepprg=grep\ -nH\ $*
-set iskeyword+=:
-
-" For our convenience as we are all familiar with using Ctrl+c to copy a block
-" of text in most other GUI applications, we can also map Ctrl+c to "*y so
-" that in Vim Visual Mode, we can simply Ctrl+c to copy the block of text we
-" want into our system buffer. To do that, we simply add this line in our
-" .vimrc file:
-map <C-c> "*y<CR>
-
-" looks for tags file recursively upwards in the directories tree
-set tags=./tags;
-
-" Toggle comments of selected lines in normal, visual and insert modes
-map <C-D> <plug>NERDCommenterInvert
-map! <C-D> <esc><plug>NERDCommenterInvert i
-
-" ack-grep
-let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-nnoremap <F7> :Ack<space>
-
-" generates ctags
-map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-
-" Toggle autoindentation for clipboard pasting
-set pastetoggle=<F10>
-
-" Remove trail spaces
-nnoremap <silent> ,r :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
-
-" close automatically preview window of omnicompletion
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-"colorscheme zeburn
-" Default white on pink for the pop-up menu looks a bit unpleasant
-highlight Pmenu ctermbg=238 gui=bold
-
-"gundo configuration
-let g:gundo_width = 30
-let g:gundo_preview_height = 30
-let g:gundo_right = 1
-nnoremap <F8> :GundoToggle<CR>
-
 " Close Vim if the only buffer is a nerdtree
 autocmd bufenter *
   \ if (winnr("$") == 1 && exists("b:NERDTreeType")
@@ -435,8 +395,3 @@ autocmd bufenter *
   \ q|
   \ endif
 
-"Text indentation with par
-" some features are useful for writting latex source files
-set formatprg=par
-autocmd FileType tex set textwidth=78 formatoptions+=t spell
-let g:tex_comment_nospell= 1 "disable spell checker in comments
