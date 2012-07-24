@@ -162,6 +162,10 @@ if has("gui_running")
     set guioptions-=L
     set guioptions-=r
     set guioptions-=R
+
+    " Window size
+    au GUIEnter * winpos 50 25
+    au GUIEnter * set lines=999 columns=999
 else
     let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
     set background=dark
@@ -395,4 +399,3 @@ autocmd bufenter *
   \ && b:NERDTreeType == "primary")|
   \ q|
   \ endif
-
