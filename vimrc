@@ -124,6 +124,7 @@ nmap <C-Up> :buffers<cr>
 imap <C-Up> <esc>:buffers<cr>
 
 " Filetype dependant options
+autocmd FileType text set textwidth=80 formatoptions+=t spell
 autocmd FileType c,cpp,slang set cindent "automatic indentation for C/C++
 autocmd filetype svn,*commit* setlocal spell "spell check for commit logs
 autocmd FileType make set noexpandtab shiftwidth=8 "tabs in makefiles
