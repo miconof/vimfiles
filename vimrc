@@ -66,6 +66,16 @@ map <C-c> "*y<CR>
 set tags=./tags;    "look for tags recursively upwards in the directories tree
 set formatprg=par   "Set par as the default parser for text
 
+"powerline configuration
+let g:Powerline_symbols = 'fancy'
+
+"clang and supertab settings
+set completeopt=menu,menuone,longest  "disable preview scratch window
+set pumheight=15                      "limit popup menu height
+let g:SuperTabDefaultCompletionType = "context" "context aware completion
+let g:clang_complete_auto = 0 "disable auto popup, use <Tab> to autocomplete
+let g:clang_complete_copen = 1 "show clang errors in the quickfix window
+
 "nerdtree settings
 let g:NERDTreeMouseMode = 2
 let g:NERDTreeWinSize = 24
@@ -151,7 +161,7 @@ endif
 
 " GUI dependent options
 if has("gui_running")
-    "set guifont=Osaka-Mono:h20
+    "set guifont=Terminus\ 8
     set background=dark
     set cursorline        " highlight current line
     colors wombat
