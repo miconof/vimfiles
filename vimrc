@@ -163,9 +163,9 @@ endif
 if has("gui_running")
     "set guifont=Terminus\ 8
     set background=dark
-    set cursorline        " highlight current line
-    colors wombat
+    "colors default
     highlight CursorLine guibg=#003853 ctermbg=24 gui=none cterm=none
+    set cursorline        " highlight current line
 
     " Remove toolbar, left scrollbar and right scrollbar
     set guioptions-=T
@@ -180,7 +180,7 @@ if has("gui_running")
 else
     let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
     set background=dark
-    colors wombat
+    colors default
 endif
 
 "statusline setup
