@@ -165,6 +165,8 @@ if has("gui_running")
     set background=dark
     "colors default
     highlight CursorLine guibg=#003853 ctermbg=24 gui=none cterm=none
+    hi Search guifg=#ffffff guibg=#0000ff ctermfg=white ctermbg=darkyellow
+    hi IncSearch guifg=#ffffff guibg=#8888ff ctermfg=white ctermbg=darkyellow
     set cursorline        " highlight current line
 
     " Remove toolbar, left scrollbar and right scrollbar
@@ -181,6 +183,8 @@ else
     let g:CSApprox_loaded = 1 "dont load csapprox silences an annoying warning
     set background=dark
     colors default
+    hi Search guifg=#ffffff guibg=#0000ff ctermfg=white ctermbg=darkyellow
+    hi IncSearch guifg=#ffffff guibg=#8888ff ctermfg=white ctermbg=darkyellow
 endif
 
 "statusline setup
