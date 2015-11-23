@@ -75,6 +75,7 @@ set pumheight=15                      "limit popup menu height
 let g:SuperTabDefaultCompletionType = "context" "context aware completion
 let g:clang_complete_auto = 0 "disable auto popup, use <Tab> to autocomplete
 let g:clang_complete_copen = 1 "show clang errors in the quickfix window
+let g:clang_library_path = '/usr/lib/llvm-3.5/lib/'
 
 "nerdtree settings
 let g:NERDTreeMouseMode = 2
